@@ -1,0 +1,4 @@
+*.py
+test_*
+.DS_Store
+*.log

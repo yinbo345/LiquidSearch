@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin:0; padding:0; box-sizing: border-box; }
+
+    body {
+      width: 320px;
+      min-height: 460px;
+      font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #f4f5f7 0%, #e8eaf0 100%);
+      color: #1d1d1f;
+      padding: 0;
+    }
+
+    /* 顶部标题栏 */
+    .header {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(200,205,215,0.50);
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #a0aec0, #718096);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .header-text h1 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #1d1d1f;
+    }
+    .header-text p {
+      font-size: 11px;
+      color: #8e8ea0;
+      margin-top: 2px;
+    }
+
+    /* 设置项区域 */
+    .section {
+      padding: 16px 20px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8e8ea0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    /* 开关行 */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(200,205,215,0.30);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label {
+      font-size: 14px;
+      color: #1d1d1f;
+    }
+    .toggle-sub {
+      font-size: 11px;
+      color: #8e8ea0;
+      margin-top: 2px;
+    }
+
+    /* 开关按钮 */
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { display: none; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #d1d5db;
+      border-radius: 14px;
+      transition: background 0.3s ease;
+    }
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      width: 22px; height: 22px;
+      left: 3px; bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(.25,.84,.32,1.12), box-shadow 0.3s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(20px);
+      box-shadow: 0 1px 6px rgba(102,126,234,0.30);
+    }
+
+    /* 字体选择 */
+    .font-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .font-btn {
+      flex: 1;
+      padding: 10px 0;
+      border: 2px solid rgba(200,205,215,0.50);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.60);
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1d1d1f;
+      transition: all 0.3s cubic-bezier(.25,.84,.32,1.12);
+    }
+    .font-btn:hover { transform: scale(1.04); border-color: rgba(102,126,234,0.40); }
+    .font-btn.active {
+      background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.10));
+      border-color: #667eea;
+      color: #667eea;
+    }
+
+    /* 主题色选择 */
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .color-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .color-btn {
+      flex: 1;
+      height: 36px;
+      border-radius: 10px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(.25,.84,.32,1.12);
+      position: relative;
+    }
+    .color-btn:hover { transform: scale(1.10); }
+    .color-btn.active {
+      border-color: #1d1d1f;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px currentColor;
+    }
+    .color-btn.active::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+    }
+
+    /* 底部 */
+    .footer {
+      padding: 14px 20px 16px;
+      text-align: center;
+      border-top: 1px solid rgba(200,205,215,0.30);
+    }
+    .footer span {
+      display: block;
+      font-size: 11px;
+      color: #8e8ea0;
+      margin-bottom: 10px;
+    }
+    .reset-btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 10px;
+      border: 1px solid rgba(200,205,215,0.50);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.60);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e53e3e;
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+      transition: all 0.3s ease;
+    }
+    .reset-btn:hover {
+      background: rgba(229,62,62,0.08);
+      border-color: rgba(229,62,62,0.30);
+    }
+
+    /* 退出/开启美化 按钮 */
+    .beautify-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(102,126,234,0.40);
+      border-radius: 12px;
+      background: rgba(102,126,234,0.08);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #667eea;
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+      transition: all 0.3s ease;
+    }
+    .beautify-btn:hover {
+      background: rgba(102,126,234,0.15);
+      border-color: rgba(102,126,234,0.60);
+    }
+    .beautify-btn.disabled {
+      background: rgba(255,255,255,0.60);
+      border-color: rgba(200,205,215,0.50);
+      color: #1d1d1f;
+    }
+    .beautify-btn.disabled:hover {
+      background: rgba(255,255,255,0.90);
+      border-color: rgba(102,126,234,0.40);
+    }
+
+    /* ========== macOS 风格确认弹窗 ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 260px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid rgba(220,225,235,0.60);
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+      padding: 22px 22px 16px;
+      text-align: center;
+      transform: scale(0.82);
+      transition: transform 0.42s cubic-bezier(.25,.84,.32,1.12);
+    }
+    .modal-overlay.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-bottom: 10px;
+    }
+    .modal-text {
+      font-size: 12.5px;
+      color: #5a5a7a;
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .modal-btns {
+      display: flex;
+      gap: 8px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 8px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(.25,.84,.32,1.12);
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+    }
+    .modal-btn:active { transform: scale(0.95); }
+    .modal-btn.cancel {
+      background: rgba(200,205,215,0.35);
+      color: #5a5a7a;
+    }
+    .modal-btn.cancel:hover { background: rgba(200,205,215,0.55); }
+    .modal-btn.confirm {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(102,126,234,0.25);
+    }
+    .modal-btn.confirm:hover {
+      box-shadow: 0 4px 14px rgba(102,126,234,0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部标题 -->
+  <div class="header">
+    <div class="header-icon">🔍</div>
+    <div class="header-text">
+      <h1>LiquidSearch</h1>
+      <p>液态搜索增强 v1.1</p>
+    </div>
+  </div>
+
+  <!-- 功能开关 -->
+  <div class="section">
+    <div class="section-title">功能设置</div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">屏蔽广告</div>
+        <div class="toggle-sub">去除搜索引擎广告内容</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggleAds" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">悬浮卡片</div>
+        <div class="toggle-sub">搜索结果卡片化展示</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggleCard" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Q弹动画</div>
+        <div class="toggle-sub">卡片悬停弹性动画效果</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggleAnim" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <!-- 深色模式开关 -->
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">深色模式</div>
+        <div class="toggle-sub">暗色主题，保护眼睛</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggleDark">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- 字体大小 -->
+  <div class="section">
+    <div class="section-title">字体大小</div>
+    <div class="font-options">
+      <div class="font-btn active" data-font="normal">标准</div>
+      <div class="font-btn" data-font="large">大号</div>
+    </div>
+  </div>
+
+  <!-- 主题色 -->
+  <div class="section">
+    <div class="section-title">主题色</div>
+    <div class="color-options">
+      <div class="color-btn active" data-color="default" style="background: linear-gradient(135deg,#667eea,#764ba2); color:#667eea;" title="蓝紫"></div>
+      <div class="color-btn" data-color="mint" style="background: linear-gradient(135deg,#38b2ac,#319795); color:#38b2ac;" title="薄荷"></div>
+      <div class="color-btn" data-color="sakura" style="background: linear-gradient(135deg,#ed64a6,#d53f8c); color:#ed64a6;" title="樱花粉"></div>
+      <div class="color-btn" data-color="amber" style="background: linear-gradient(135deg,#ed8936,#dd6b20); color:#ed8936;" title="琥珀橙"></div>
+      <div class="color-btn" data-color="sky" style="background: linear-gradient(135deg,#4299e1,#3182ce); color:#4299e1;" title="天蓝"></div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <span>设置自动保存，刷新页面后生效</span>
+    <button class="reset-btn" id="resetBtn">恢复默认设置</button>
+    <button class="beautify-btn" id="beautifyBtn">退出美化</button>
+  </div>
+
+  <!-- macOS 风格确认弹窗：深色模式 -->
+  <div class="modal-overlay" id="darkModal">
+    <div class="modal-box">
+      <div class="modal-title">来自插件的提示</div>
+      <div class="modal-text">真的要开启深色模式吗？<br>开启深色模式有可能会使字体显示不全，<br>也会有一些不会变为深色</div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="darkCancel">取消</button>
+        <button class="modal-btn confirm" id="darkConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- macOS 风格确认弹窗：退出美化 -->
+  <div class="modal-overlay" id="beautifyModal">
+    <div class="modal-box">
+      <div class="modal-title">来自插件的提示</div>
+      <div class="modal-text">确定要关闭美化吗？<br>（重启浏览器美化会再次生效）</div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="beautifyCancel">取消</button>
+        <button class="modal-btn confirm" id="beautifyConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

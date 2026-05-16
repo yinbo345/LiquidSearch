@@ -1,0 +1,148 @@
+/* ============================================
+   LiquidSearch Enhancer - 基础样式
+   content.js 注入动态主题样式，本文件只保留
+   content_scripts 在页面加载时就需要生效的基础样式
+   ============================================ */
+
+/* ---------- 全局字体（备用，content.js 也会设置）---------- */
+* {
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC",
+    "Helvetica Neue", sans-serif !important;
+}
+
+/* ---------- 搜索框基础样式（ focus/悬停由 content.js 注入的 CSS 控制）---------- */
+input[type="text"],
+input[type="search"],
+textarea,
+#kw,
+#searchbox,
+.search-box,
+[role="searchbox"] {
+  border-radius: 16px !important;
+  padding: 10px 18px !important;
+  font-size: 16px !important;
+  outline: none !important;
+}
+
+/* 白色/浅色模式搜索框默认外观 */
+html:not([data-liquid-theme="dark"]) input[type="text"],
+html:not([data-liquid-theme="dark"]) input[type="search"],
+html:not([data-liquid-theme="dark"]) textarea,
+html:not([data-liquid-theme="dark"]) #kw,
+html:not([data-liquid-theme="dark"]) #searchbox,
+html:not([data-liquid-theme="dark"]) .search-box,
+html:not([data-liquid-theme="dark"]) [role="searchbox"] {
+  background: rgba(255,255,255,0.85) !important;
+  border: 1px solid rgba(200,205,215,0.60) !important;
+  color: #1d1d1f !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+}
+
+/* 深色模式搜索框默认外观 */
+html[data-liquid-theme="dark"] input[type="text"],
+html[data-liquid-theme="dark"] input[type="search"],
+html[data-liquid-theme="dark"] textarea,
+html[data-liquid-theme="dark"] #kw,
+html[data-liquid-theme="dark"] #searchbox,
+html[data-liquid-theme="dark"] .search-box,
+html[data-liquid-theme="dark"] [role="searchbox"] {
+  background: rgba(40,40,55,0.85) !important;
+  border: 1px solid rgba(80,80,100,0.50) !important;
+  color: #e0e0e8 !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
+}
+
+/* ---------- 按钮基础样式（动效由 content.js 注入的 CSS 控制）---------- */
+input[type="submit"],
+button,
+.search-btn,
+#su,
+[role="search"] button,
+[type="submit"] {
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 10px 28px !important;
+  cursor: pointer !important;
+}
+
+html:not([data-liquid-theme="dark"]) input[type="submit"],
+html:not([data-liquid-theme="dark"]) button,
+html:not([data-liquid-theme="dark"]) #su,
+html:not([data-liquid-theme="dark"]) [type="submit"] {
+  background: rgba(255,255,255,0.85) !important;
+  border: 1px solid rgba(200,205,215,0.60) !important;
+  color: #1d1d1f !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+html[data-liquid-theme="dark"] input[type="submit"],
+html[data-liquid-theme="dark"] button,
+html[data-liquid-theme="dark"] #su,
+html[data-liquid-theme="dark"] [type="submit"] {
+  background: rgba(60,60,75,0.85) !important;
+  border: 1px solid rgba(90,90,110,0.50) !important;
+  color: #e0e0e8 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(200,205,215,0.15); border-radius: 8px; }
+
+html:not([data-liquid-theme="dark"]) ::-webkit-scrollbar-thumb { background: rgba(180,185,200,0.50); border-radius: 8px; }
+html:not([data-liquid-theme="dark"]) ::-webkit-scrollbar-thumb:hover { background: rgba(150,155,175,0.70); }
+
+html[data-liquid-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(90,90,110,0.50); border-radius: 8px; }
+html[data-liquid-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: rgba(110,110,130,0.70); }
+
+* { scrollbar-width: thin; }
+html:not([data-liquid-theme="dark"]) * { scrollbar-color: rgba(180,185,200,0.5) transparent; }
+html[data-liquid-theme="dark"] * { scrollbar-color: rgba(90,90,110,0.5) transparent; }
+
+/* ---------- 百度顶部栏 ---------- */
+#head,
+#s_top_wrap,
+.head-wrap {
+  border-bottom: 1px solid rgba(220,225,235,0.50) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.03) !important;
+}
+
+html:not([data-liquid-theme="dark"]) #head,
+html:not([data-liquid-theme="dark"]) #s_top_wrap,
+html:not([data-liquid-theme="dark"]) .head-wrap {
+  background: rgba(244,245,247,0.75) !important;
+}
+
+html[data-liquid-theme="dark"] #head,
+html[data-liquid-theme="dark"] #s_top_wrap,
+html[data-liquid-theme="dark"] .head-wrap {
+  background: rgba(18,18,28,0.75) !important;
+  border-bottom-color: rgba(60,60,75,0.50) !important;
+}
+
+/* ---------- 分页按钮基础样式 ---------- */
+.n,
+.pc,
+.b_pag a,
+#page a {
+  border-radius: 12px !important;
+}
+
+html:not([data-liquid-theme="dark"]) .n,
+html:not([data-liquid-theme="dark"]) .pc,
+html:not([data-liquid-theme="dark"]) .b_pag a,
+html:not([data-liquid-theme="dark"]) #page a {
+  background: rgba(255,255,255,0.70) !important;
+  border: 1px solid rgba(220,225,235,0.60) !important;
+  color: #1d1d1f !important;
+}
+
+html[data-liquid-theme="dark"] .n,
+html[data-liquid-theme="dark"] .pc,
+html[data-liquid-theme="dark"] .b_pag a,
+html[data-liquid-theme="dark"] #page a {
+  background: rgba(50,50,65,0.70) !important;
+  border: 1px solid rgba(80,80,100,0.50) !important;
+  color: #e0e0e8 !important;
+}

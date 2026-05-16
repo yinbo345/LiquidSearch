@@ -84,6 +84,15 @@ body{
   transition:all 0.3s cubic-bezier(0.22,0.83,0.32,1.18);
 }
 .dl-btn:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(102,126,234,0.55)}
+.dl-btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:14px;
+  border:2px solid rgba(102,126,234,0.40);background:transparent;
+  color:var(--primary);font-size:14px;font-weight:700;cursor:pointer;
+  font-family:inherit;text-decoration:none;
+  transition:all 0.3s cubic-bezier(0.22,0.83,0.32,1.18);
+}
+.dl-btn-outline:hover{background:rgba(102,126,234,0.08);transform:scale(1.04)}
 .dl-center{text-align:center;margin:32px 0}
 
 /* 分隔线 */
@@ -125,8 +134,9 @@ body{
     <div class="step-num">1</div>
     <h3>下载扩展文件</h3>
     <p>点击下方按钮下载 LiquidSearch 最新版 zip 压缩包，保存到本地任意位置（记住保存位置）。</p>
-    <div class="dl-center">
-      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.zip">⬇️ 下载 LiquidSearch v1.1</a>
+    <div class="dl-center" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.zip" style="background:linear-gradient(135deg,#667eea,#764ba2)">📦 下载 ZIP 格式</a>
+      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.7z" style="background:linear-gradient(135deg,#f093fb,#667eea)">🗜️ 下载 7Z 格式</a>
     </div>
     <p class="note">💡 如果 GitHub 下载慢，也可以用国内镜像或 Gitee 镜像加速下载。</p>
   </div>
@@ -137,6 +147,9 @@ body{
     <h3>解压 zip 文件</h3>
     <p>找到下载好的 <code>LiquidSearch_v1.1.zip</code>，右键 → 解压到当前文件夹。<br>解压后得到一个 <code>LiquidSearchEnhancer</code> 文件夹，记住这个文件夹的位置。</p>
     <p class="note">⚠️ 注意：必须将 zip 解压，不能直接拖进浏览器！</p>
+    <div style="margin-top:14px">
+      <a class="dl-btn-outline" href="https://www.7-zip.org/" target="_blank">🗜️ 我没有解压工具？获取 7-Zip</a>
+    </div>
   </div>
 
   <!-- 步骤 3 -->

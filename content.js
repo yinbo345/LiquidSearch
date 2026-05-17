@@ -3,6 +3,7 @@
 
 (function () {
   'use strict';
+  console.log('[LiquidSearch] content.js 已加载，当前页面:', location.href);
 
   // ========== 读取用户设置 ==========
   let settings = {
@@ -498,6 +499,7 @@
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
     // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   function simplifyHomePage() {
+    console.log('[LiquidSearch] simplifyHomePage 被调用，ls360home=', document.body.dataset.ls360home);
     if (!document.body.dataset.ls360home) return;
 
     // 1. 找到搜索框（多种选择器尝试）
@@ -659,13 +661,16 @@
       document.documentElement.dataset.liquidTheme = settings.theme;
 
       // 检测是否在360主页/导航页（不是搜索结果页）
+      console.log('[LiquidSearch] 当前域名:', location.hostname, '路径:', location.pathname);
       if ((location.hostname === 'www.so.com' && location.pathname === '/') ||
           (location.hostname === 'hao.360.cn' && location.pathname === '/') ||
           (location.hostname === 'hao.360.com' && location.pathname === '/') ||
           (location.hostname === 'cn.bing.com' && (location.pathname === '/' || location.pathname === ''))) {
         document.body.dataset.ls360home = '1';
+        console.log('[LiquidSearch] 检测到导航页，启用简化模式');
       } else {
         delete document.body.dataset.ls360home;
+        console.log('[LiquidSearch] 非导航页，跳过简化');
       }
 
       removeAds();

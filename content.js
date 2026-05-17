@@ -496,62 +496,105 @@
   // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
-  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
+    // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   function simplifyHomePage() {
     if (!document.body.dataset.ls360home) return;
 
-    // 1. 找到搜索框
-    const searchInput = document.querySelector('input[type="text"], input[type="search"], [name="q"], #kw, input[placeholder]');
-    if (!searchInput) return;
+    // 1. 找到搜索框（多种选择器尝试）
+    let searchInput = document.querySelector(
+      'input[type="text"], input[type="search"], input:not([type]),' +
+      'input[name], input[id], .search-input, #search-input,' +
+      '[class*="search"] input, [id*="search"] input'
+    );
+    // 备用：找 form 里的第一个 input
+    if (!searchInput) {
+      const form = document.querySelector('form');
+      if (form) searchInput = form.querySelector('input');
+    }
+    // 备用：找页面中任意 input（排除 hidden）
+    if (!searchInput) {
+      document.querySelectorAll('input').forEach(inp => {
+        if (!searchInput && inp.type !== 'hidden' && inp.offsetWidth > 0) {
+          searchInput = inp;
+        }
+      });
+    }
+    if (!searchInput) {
+      console.log('[LiquidSearch] 未找到搜索框，跳过主页简化');
+      return;
+    }
+    console.log('[LiquidSearch] 找到搜索框:', searchInput.outerHTML.slice(0, 100));
 
     // 2. 找到包含搜索框的 body 直接子元素（wrapper）
-    let bodyChild = searchInput;
-    while (bodyChild && bodyChild.parentElement !== document.body) {
-      bodyChild = bodyChild.parentElement;
+    let wrapper = searchInput;
+    while (wrapper && wrapper.parentElement && wrapper.parentElement !== document.body) {
+      wrapper = wrapper.parentElement;
     }
-    if (!bodyChild || bodyChild === document.body) return;
+    if (!wrapper || wrapper === document.body || wrapper === searchInput) {
+      console.log('[LiquidSearch] 未找到 wrapper');
+      return;
+    }
+    console.log('[LiquidSearch] wrapper:', wrapper.tagName, wrapper.className || wrapper.id || '');
 
-    // 3. 隐藏 body 中不包含搜索框的其他直接子元素
+    // 3. 隐藏 body 的其他直接子元素
     Array.from(document.body.children).forEach(child => {
-      if (child !== bodyChild) child.style.display = "none";
+      if (child !== wrapper) child.style.display = 'none';
     });
 
-    // 4. 在保留的 wrapper 内部，找到搜索框所在的直接子元素
-    let searchContainer = searchInput;
-    while (searchContainer && searchContainer.parentElement !== bodyChild) {
-      searchContainer = searchContainer.parentElement;
+    // 4. 在 wrapper 内部，找到搜索框所在的直接子元素
+    let searchArea = searchInput;
+    while (searchArea && searchArea.parentElement && searchArea.parentElement !== wrapper) {
+      searchArea = searchArea.parentElement;
     }
 
-    // 5. 在 wrapper 内部，保留搜索框容器和快捷访问，隐藏其他
-    Array.from(bodyChild.children).forEach(child => {
-      // 5a. 保留搜索框所在的容器
-      if (child === searchContainer || child.contains(searchContainer)) return;
+    // 5. 遍历 wrapper 子元素，保留搜索区和快捷访问，隐藏其他
+    const hiddenTags = ['nav', 'header', 'footer', 'aside'];
+    const hideKeywords = ['ad', 'sponsor', 'promo', 'banner', 'footer', 'bottom', 'news', 'trend', 'rank'];
+    const shortcutKeywords = ['short', 'quick', 'link', 'site', 'nav', 'menu', 'favor', 'book', 'site', '常用'];
 
-      // 5b. 保留快捷访问（包含多个链接且类名/ID有关键词）
-      const links = child.querySelectorAll("a");
-      if (links.length >= 3) {
-        const cls = " " + (child.className || "") + " ";
-        const id  = " " + (child.id || "") + " ";
-        const shortcutKw = ["short", "quick", "link", "site", "nav", "menu", "favor", "book"];
-        if (shortcutKw.some(k => cls.includes(k) || id.includes(k))) return;
+    Array.from(wrapper.children).forEach(child => {
+      // 5a. 保留搜索框区域
+      if (child === searchArea || child.contains(searchArea)) return;
+
+      // 5b. 隐藏 nav/header/footer/aside 标签
+      if (hiddenTags.includes(child.tagName.toLowerCase())) {
+        child.style.display = 'none';
+        return;
       }
 
-      // 5c. 隐藏其他所有（导航、广告、分类、footer等）
-      child.style.display = "none";
+      // 5c. 检查是否是快捷访问（含多个非广告链接）
+      const links = child.querySelectorAll('a');
+      if (links.length >= 3) {
+        const cls = ' ' + (child.className || '') + ' ';
+        const id  = ' ' + (child.id || '') + ' ';
+        if (shortcutKeywords.some(k => cls.includes(k) || id.includes(k))) return;
+      }
+
+      // 5d. 检查类名是否含广告/推荐等关键词
+      const cls = ' ' + (child.className || '') + ' ';
+      if (hideKeywords.some(k => cls.includes(' ' + k + ' ') || cls.includes('-' + k + ' ') || cls.includes(' ' + k + '-'))) {
+        child.style.display = 'none';
+        return;
+      }
+
+      // 5e. 默认隐藏（只保留搜索框和快捷访问）
+      child.style.display = 'none';
     });
 
-    // 6. 美化：居中
-    document.body.style.background   = "#f4f5f7";
-    document.body.style.minHeight    = "100vh";
-    document.body.style.margin       = "0";
-    document.body.style.display      = "flex";
-    document.body.style.flexDirection   = "column";
-    document.body.style.justifyContent = "center";
-    document.body.style.alignItems    = "center";
-    bodyChild.style.display = "flex";
-    bodyChild.style.flexDirection = "column";
-    bodyChild.style.alignItems = "center";
+    // 6. 美化居中
+    document.body.style.background   = '#f4f5f7';
+    document.body.style.minHeight    = '100vh';
+    document.body.style.margin       = '0';
+    document.body.style.display      = 'flex';
+    document.body.style.flexDirection   = 'column';
+    document.body.style.justifyContent = 'center';
+    document.body.style.alignItems    = 'center';
+    wrapper.style.display = '';
+    wrapper.style.flexDirection = 'column';
+    wrapper.style.alignItems = 'center';
+    console.log('[LiquidSearch] 主页简化完成');
   }
+
 
   // ========== 2b. 关闭所有美化效果 ==========
   function disableAllStyles() {

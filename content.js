@@ -157,6 +157,7 @@
       /* 液态玻璃卡片：百度/Bing/Google/通用 */
       '#content_left > .result,',
       '#content_left > .result-op,',
+      '#content_left > .c-container,',
       'div.g,',
       'div[data-hveid],',
       '.b_algo,',
@@ -209,6 +210,7 @@
       /* 顶部主题色高光 */
       '#content_left > .result::before,',
       '#content_left > .result-op::before,',
+      '#content_left > .c-container::before,',
       'div.g::before,',
       '.b_algo::before,',
       '.result::before,',
@@ -238,6 +240,7 @@
       /* 底部主题色辉光 */
       '#content_left > .result::after,',
       '#content_left > .result-op::after,',
+      '#content_left > .c-container::after,',
       'div.g::after,',
       '.b_algo::after,',
       '.result::after,',
@@ -267,6 +270,7 @@
       /* 卡片悬停 */
       '#content_left > .result:hover,',
       '#content_left > .result-op:hover,',
+      '#content_left > .c-container:hover,',
       'div.g:hover,',
       'div[data-hveid]:hover,',
       '.b_algo:hover,',
@@ -505,7 +509,7 @@
     removeAds();
       if (settings.cardStyle) {
         const cards = document.querySelectorAll(
-          '#content_left > .result, #content_left > .result-op, ' +
+          '#content_left > .result, #content_left > .result-op, #content_left > .c-container, ' +
           'div.g, div[data-hveid], .b_algo, .results .vrResult, .result, ' +
           /* DuckDuckGo */
           '.result--web, .result__body, ' +

@@ -1,4 +1,17 @@
-*.py
-test_*
+# Build artifacts
+*.zip
+*.7z
+*.crx
+
+# Temp files
+release_payload.json
+create_release.py
+fix_all.py
+fix_js.py
+fix_welcome.py
+test_button.html
+
+# OS files
+Thumbs.db
+Desktop.ini
 .DS_Store
-*.log

@@ -111,29 +111,34 @@ body{
 
 .ft{text-align:center;margin-top:52px;font-size:13px;color:#b0b0c8;font-weight:500}
 
-/* ========== 顶部导航栏 ========== */
+/* ========== 顶部导航栏（紧凑版）========== */
 .nav-bar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 24px;margin-bottom:20px;
+  padding:10px 20px;margin-bottom:18px;
   background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1.5px solid var(--glass-border);border-radius:0 0 18px 18px;
+  border-bottom:1.5px solid var(--glass-border);border-radius:0 0 16px 16px;
   position:sticky;top:0;z-index:99;
+  transition:box-shadow 0.3s;
 }
-.nav-logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;color:var(--primary);text-decoration:none}
-.nav-logo .ico{font-size:22px}
-.nav-links{display:flex;gap:6px;align-items:center}
+.nav-bar.scrolled{box-shadow:0 4px 24px rgba(102,126,234,0.10)}
+.nav-logo{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:900;color:var(--primary);text-decoration:none}
+.nav-logo .ico{font-size:19px;transition:transform 0.3s}
+.nav-logo:hover .ico{transform:rotate(-12deg) scale(1.15)}
+.nav-links{display:flex;gap:4px;align-items:center}
 .nav-link{
-  padding:7px 16px;border-radius:10px;
-  font-size:13px;font-weight:700;color:var(--sub);text-decoration:none;
-  transition:all 0.25s;
+  padding:5px 12px;border-radius:8px;
+  font-size:12.5px;font-weight:700;color:var(--sub);text-decoration:none;
+  transition:all 0.25s cubic-bezier(0.22,0.83,0.32,1.18);
 }
-.nav-link:hover{background:rgba(102,126,234,0.10);color:var(--primary)}
+.nav-link:hover{background:rgba(102,126,234,0.10);color:var(--primary);transform:translateY(-1px)}
 .nav-link.active{background:linear-gradient(135deg,rgba(102,126,234,0.13),rgba(118,75,162,0.09));color:var(--primary)}
 .nav-link.github{
   background:rgba(102,126,234,0.08);color:var(--primary);
-  border:1.5px solid rgba(102,126,234,0.18);border-radius:10px;
-  display:inline-flex;align-items:center;gap:5px;
+  border:1.5px solid rgba(102,126,234,0.18);border-radius:8px;
+  display:inline-flex;align-items:center;gap:4px;font-size:12px;
+  transition:all 0.25s cubic-bezier(0.22,0.83,0.32,1.18);
 }
+.nav-link.github:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(102,126,234,0.18)}
 
 /* ========== 深色模式 ========== */
 @media(prefers-color-scheme:dark){
@@ -150,10 +155,9 @@ body{
 
   <!-- 顶部导航栏 -->
   <div class="nav-bar">
-    <a class="nav-logo" href="welcome.html"><span class="ico">🔍</span> LiquidSearch</a>
+    <a class="nav-logo" href="install.html"><span class="ico">🔍</span> LiquidSearch</a>
     <div class="nav-links">
-      <a class="nav-link" href="welcome.html">欢迎</a>
-      <a class="nav-link active" href="install.html">安装说明</a>
+      <span class="nav-link active">安装说明</span>
       <a class="nav-link github" href="https://github.com/yinbo345/LiquidSearch" target="_blank">😺 GitHub</a>
     </div>
   </div>
@@ -165,23 +169,24 @@ body{
   </div>
 
   <!-- 步骤 1 -->
-  <div class="step-card">
+  <div class="step-card" id="step1">
     <div class="step-num">1</div>
     <h3>下载扩展文件</h3>
     <p>点击下方按钮下载 LiquidSearch 最新版 zip 压缩包，保存到本地任意位置（记住保存位置）。</p>
     <div class="dl-center" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.zip" style="background:linear-gradient(135deg,#667eea,#764ba2)">📦 下载 ZIP 格式</a>
+      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.2/LiquidSearch_v1.2.zip" style="background:linear-gradient(135deg,#667eea,#764ba2)">📦 下载 ZIP 格式</a>
       <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.crx" style="background:linear-gradient(135deg,#f093fb,#667eea)">🔌 下载 CRX 格式</a>
-      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.1/LiquidSearch_v1.1.7z" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">🗜️ 下载 7Z 格式</a>
+      <a class="dl-btn" href="https://github.com/yinbo345/LiquidSearch/releases/download/v1.2/LiquidSearch_v1.2.7z" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">🗜️ 下载 7Z 格式</a>
     </div>
+    <p style="text-align:center;color:#e5534b;font-size:12.5px;font-weight:700;margin-top:4px">⚠️ CRX 格式不再更新，请优先使用 ZIP 格式安装</p>
     <p class="note">💡 如果 GitHub 下载慢，也可以用国内镜像或 Gitee 镜像加速下载。</p>
   </div>
 
   <!-- 步骤 2 -->
-  <div class="step-card">
+  <div class="step-card" id="step2">
     <div class="step-num">2</div>
     <h3>解压 zip 文件</h3>
-    <p>找到下载好的 <code>LiquidSearch_v1.1.zip</code>，右键 → 解压到当前文件夹。<br>解压后得到一个 <code>LiquidSearchEnhancer</code> 文件夹，记住这个文件夹的位置。</p>
+    <p>找到下载好的 <code>LiquidSearch_v1.2.zip</code>，右键 → 解压到当前文件夹。<br>解压后得到一个 <code>LiquidSearchEnhancer</code> 文件夹，记住这个文件夹的位置。</p>
     <p class="note">⚠️ 注意：必须将 zip 解压，不能直接拖进浏览器！</p>
     <div style="margin-top:14px">
       <a class="dl-btn-outline" href="https://www.7-zip.org/" target="_blank">🗜️ 我没有解压工具？获取 7-Zip</a>
@@ -189,7 +194,7 @@ body{
   </div>
 
   <!-- 步骤 3 -->
-  <div class="step-card">
+  <div class="step-card" id="step3">
     <div class="step-num">3</div>
     <h3>打开 Chrome 扩展管理页面</h3>
     <p>在 Chrome 地址栏输入以下地址并回车：</p>
@@ -198,7 +203,7 @@ body{
   </div>
 
   <!-- 步骤 4 -->
-  <div class="step-card">
+  <div class="step-card" id="step4">
     <div class="step-num">4</div>
     <h3>开启「开发者模式」</h3>
     <p>在扩展管理页面的<strong>右上角</strong>，找到 <code>开发者模式</code> 开关，点击把它打开（变成蓝色/开启状态）。</p>
@@ -206,14 +211,14 @@ body{
   </div>
 
   <!-- 步骤 5 -->
-  <div class="step-card">
+  <div class="step-card" id="step5">
     <div class="step-num">5</div>
     <h3>加载扩展文件夹</h3>
     <p>点击左上角的 <code>加载已解压的扩展程序</code> 按钮，在弹出的窗口中选择<strong>第 2 步解压出来的</strong> <code>LiquidSearchEnhancer</code> 文件夹，点击「选择文件夹」。</p>
     <p class="note">✅ 加载成功后，LiquidSearch 会出现在扩展列表里，右上角地址栏旁边也会出现 🔍 图标！</p>
   </div>
 
-  <div class="divider">支持的浏览器</div>
+  <div class="divider" id="browsers">支持的浏览器</div>
   <div class="tags">
     <span class="tag">✅ Chrome</span>
     <span class="tag">✅ Edge</span>
@@ -222,8 +227,107 @@ body{
     <span class="tag">✅ 360 极速浏览器</span>
   </div>
 
-  <div class="ft">LiquidSearch v1.1 · 开源免费 · 永不收费 💎</div>
+  <div class="ft">LiquidSearch v1.2 · 开源免费 · 永不收费 💎</div>
 </div>
+
+<!-- 侧边浮动导航 -->
+<div class="side-nav" id="sideNav">
+  <a class="side-link" href="#" title="回到顶部">⬆</a>
+  <a class="side-link" href="#step1" title="下载扩展文件">📦</a>
+  <a class="side-link" href="#step2" title="解压文件">📂</a>
+  <a class="side-link" href="#step3" title="扩展管理页面">⚙️</a>
+  <a class="side-link" href="#step4" title="开启开发者模式">🔧</a>
+  <a class="side-link" href="#step5" title="加载扩展文件夹">📁</a>
+  <a class="side-link" href="#browsers" title="支持的浏览器">🌐</a>
+</div>
+
+<style>
+.side-nav{
+  position:fixed;right:18px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:4px;
+  padding:8px 5px;border-radius:16px;
+  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1.5px solid var(--glass-border);
+  z-index:100;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s,transform 0.4s cubic-bezier(0.22,0.83,0.32,1.18);
+}
+.side-nav.visible{opacity:1;pointer-events:auto;transform:translateY(-50%) translateX(0)}
+.side-link{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:10px;
+  font-size:14px;text-decoration:none;color:var(--sub);
+  transition:all 0.25s;position:relative;
+}
+.side-link:hover{
+  background:rgba(102,126,234,0.13);color:var(--primary);
+  transform:scale(1.15);
+}
+.side-link.active{
+  background:linear-gradient(135deg,rgba(102,126,234,0.18),rgba(118,75,162,0.10));
+  color:var(--primary);
+}
+.side-link::after{
+  content:attr(title);position:absolute;right:42px;
+  padding:4px 10px;border-radius:8px;
+  background:rgba(20,20,40,0.85);backdrop-filter:blur(8px);
+  color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+}
+.side-link:hover::after{opacity:1}
+
+@media(prefers-color-scheme:dark){
+  .side-nav{background:rgba(38,38,62,0.78)}
+  .side-link::after{background:rgba(240,240,255,0.90);color:#111127}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  // 顶部导航栏滚动阴影
+  const navBar=document.querySelector('.nav-bar');
+  if(navBar){
+    function onScroll(){
+      navBar.classList.toggle('scrolled',window.scrollY>20);
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  }
+
+  // 侧边导航
+  const sideNav=document.getElementById('sideNav');
+  if(sideNav){
+    // 显示/隐藏
+    function onScrollSide(){
+      sideNav.classList.toggle('visible',window.scrollY>300);
+    }
+    window.addEventListener('scroll',onScrollSide,{passive:true});
+    onScrollSide();
+
+    // 滚动高亮章节
+    const links=sideNav.querySelectorAll('.side-link');
+    const sections=[];
+    links.forEach(a=>{
+      const href=a.getAttribute('href');
+      if(href==='#'){sections.push({el:document.body,link:a});return;}
+      const el=document.querySelector(href);
+      if(el)sections.push({el,link:a});
+    });
+
+    function onScrollHighlight(){
+      const sy=window.scrollY+window.innerHeight/3;
+      let current=null;
+      sections.forEach(s=>{
+        if(s.el&&s.el.offsetTop<=sy)current=s.link;
+      });
+      links.forEach(a=>a.classList.remove('active'));
+      if(current)current.classList.add('active');
+    }
+    window.addEventListener('scroll',onScrollHighlight,{passive:true});
+    onScrollHighlight();
+  }
+});
+</script>
 
 </body>
 </html>

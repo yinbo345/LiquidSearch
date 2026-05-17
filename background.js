@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     // 2. 发送 Chrome 系统通知
     chrome.notifications.create('ls-install-tip', {
       type: 'basic',
-      iconUrl: 'icon_128.png',
+      iconUrl: chrome.runtime.getURL('icon_128.png'),
       title: 'LiquidSearch 液态搜索增强',
       message: '推荐使用 Microsoft Bing 搜索引擎，液态玻璃效果最佳。其他引擎可能会有显示问题。',
       priority: 1,

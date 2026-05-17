@@ -321,29 +321,24 @@ body{
 
 .ft{text-align:center;margin-top:52px;font-size:13px;color:#b0b0c8;animation:fadeUp 0.7s ease 2.5s both;font-weight:500}
 
-/* ========== 顶部导航栏 ========== */
-.nav-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 24px;margin-bottom:20px;
-  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1.5px solid var(--glass-border);border-radius:0 0 18px 18px;
-  position:sticky;top:0;z-index:99;
+/* ========== 底部按钮 ========== */
+.act{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:36px 0}
+.bt{
+  padding:14px 36px;border-radius:16px;border:none;
+  font-size:15px;font-weight:800;cursor:pointer;
+  font-family:inherit;transition:all 0.35s cubic-bezier(0.22,0.83,0.32,1.18);
 }
-.nav-logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;color:var(--primary);text-decoration:none}
-.nav-logo .ico{font-size:22px}
-.nav-links{display:flex;gap:6px;align-items:center}
-.nav-link{
-  padding:7px 16px;border-radius:10px;
-  font-size:13px;font-weight:700;color:var(--sub);text-decoration:none;
-  transition:all 0.25s;
+.bt:active{transform:scale(0.95)}
+.bp{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#fff;box-shadow:0 8px 28px rgba(102,126,234,0.45);
 }
-.nav-link:hover{background:rgba(102,126,234,0.10);color:var(--primary)}
-.nav-link.active{background:linear-gradient(135deg,rgba(102,126,234,0.13),rgba(118,75,162,0.09));color:var(--primary)}
-.nav-link.github{
+.bp:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 12px 36px rgba(102,126,234,0.6)}
+.bs{
   background:rgba(102,126,234,0.08);color:var(--primary);
-  border:1.5px solid rgba(102,126,234,0.18);border-radius:10px;
-  display:inline-flex;align-items:center;gap:5px;
+  border:2px solid rgba(102,126,234,0.30);
 }
+.bs:hover{background:rgba(102,126,234,0.15);transform:translateY(-3px) scale(1.06)}
 
 /* ========== 深色模式 ========== */
 @media(prefers-color-scheme:dark){
@@ -371,22 +366,12 @@ body{
 
 <div class="page">
 
-  <!-- 顶部导航栏 -->
-  <div class="nav-bar">
-    <a class="nav-logo" href="welcome.html"><span class="ico">🔍</span> LiquidSearch</a>
-    <div class="nav-links">
-      <a class="nav-link active" href="welcome.html">欢迎</a>
-      <a class="nav-link" href="install.html">安装说明</a>
-      <a class="nav-link github" href="https://github.com/yinbo345/LiquidSearch" target="_blank">😺 GitHub</a>
-    </div>
-  </div>
-
   <!-- Hero -->
-  <div class="hero">
+  <div class="hero" id="hero">
     <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
     <div class="ico">🔍</div>
     <h1>LiquidSearch</h1>
-    <div class="badge">v1.1 · 液态玻璃搜索增强</div>
+    <div class="badge">v1.2 · 液态玻璃搜索增强</div>
     <p class="sub">已成功安装！让搜索结果纯净如初，美如玻璃。<br>支持百度、Google、Bing 等 10+ 搜索引擎。</p>
   </div>
 
@@ -397,7 +382,7 @@ body{
   </div>
 
   <!-- 数据统计 -->
-  <div class="stats">
+  <div class="stats" id="stats">
     <div class="sgrid">
       <div class="sc"><div class="num">10+</div><div class="lbl">搜索引擎</div></div>
       <div class="sc"><div class="num">5</div><div class="lbl">主题色</div></div>
@@ -417,6 +402,17 @@ body{
       <div class="wc"><span class="ic">✨</span><h3>毛玻璃卡片</h3><p>搜索结果以半透明卡片展示，使用 backdrop-filter 实现模糊玻璃效果。</p></div>
       <div class="wc"><span class="ic">🎯</span><h3>悬停动画</h3><p>卡片悬停时有轻微的缩放动效，用自定义贝塞尔曲线实现弹性手感。</p></div>
       <div class="wc"><span class="ic">🎨</span><h3>主题设置</h3><p>支持深色模式、5 种主题色和字体大小调节，点击扩展图标即可设置。</p></div>
+    </div>
+  </div>
+
+  <!-- v1.2 更新日志 -->
+  <div class="chlog">
+    <h2>🆕 v1.2 更新日志</h2>
+    <div class="clist">
+      <div class="ci"><span class="ci-ic">🐛</span><div class="ci-text">修复通知权限缺失导致 background.js 报错的问题 <span>| manifest.json 补充 notifications 权限</span></div></div>
+      <div class="ci"><span class="ci-ic">🐛</span><div class="ci-text">修复 content_scripts 全站匹配导致百度主页搜索框消失 <span>| 仅注入搜索结果页</span></div></div>
+      <div class="ci"><span class="ci-ic">🐛</span><div class="ci-text">修复 welcome.js 按钮失效问题 <span>| 完善错误处理与兜底方案</span></div></div>
+      <div class="ci"><span class="ci-ic">🔧</span><div class="ci-text">优化通知图标路径，使用 chrome.runtime.getURL <span>| 通知图标正常显示</span></div></div>
     </div>
   </div>
 
@@ -532,9 +528,10 @@ body{
     <button class="bt bs" id="bClose">关闭本页</button>
   </div>
 
-  <div class="ft">LiquidSearch v1.1 · 用心做好每一个细节 💎</div>
+  <div class="ft">LiquidSearch v1.2 · 用心做好每一个细节 💎</div>
 </div>
 
 <script src="welcome.js"></script>
+
 </body>
 </html>

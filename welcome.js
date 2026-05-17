@@ -68,14 +68,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function openTab(url) {
     // 优先通过 background 打开
-    if (chrome && chrome.runtime) {
-      chrome.runtime.sendMessage({ action: 'openTab', url: url });
+    if (chrome && chrome.runtime && chrome.runtime.id) {
+      chrome.runtime.sendMessage({ action: 'openTab', url: url }, function(resp) {
+        if (chrome.runtime.lastError) {
+          fallback(url);
+        }
+      });
       return;
     }
-    // 兜底
-    var a = document.createElement('a');
-    a.href = url; a.target = '_blank'; a.rel = 'noopener';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    fallback(url);
+    function fallback(url) {
+      var a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
   }
 
   function copyMail() {

@@ -2,13 +2,13 @@
   "manifest_version": 3,
   "name": "LiquidSearch 液态搜索增强",
   "short_name": "LiquidSearch",
-  "version": "1.1",
+  "version": "1.2",
   "description": "去除搜索引擎广告，液态玻璃风格悬浮卡片，Q弹动画。支持百度、Google、Bing 等 10+ 搜索引擎。",
   "icons": {
     "48": "icon_48.png",
     "128": "icon_128.png"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "notifications"],
   "host_permissions": [
     "*://www.baidu.com/*",
     "*://www.google.com/*",
@@ -26,13 +26,9 @@
     {
       "matches": [
         "*://www.baidu.com/s*",
-        "*://www.baidu.com/*",
         "*://www.google.com/search*",
-        "*://www.google.com/*",
         "*://www.bing.com/search*",
-        "*://www.bing.com/*",
         "*://cn.bing.com/search*",
-        "*://cn.bing.com/*",
         "*://www.sogou.com/web*",
         "*://weixin.sogou.com/*",
         "*://www.so.com/s*",

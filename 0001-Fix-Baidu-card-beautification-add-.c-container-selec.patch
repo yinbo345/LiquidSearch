@@ -1,0 +1,98 @@
+From 73de0a78bf0043ca8f23cdf6f0da36a9f3629bfe Mon Sep 17 00:00:00 2001
+From: yinbo345 <tianlu345@163.com>
+Date: Sun, 17 May 2026 10:29:09 +0800
+Subject: [PATCH] Fix Baidu card beautification: add .c-container selector, fix
+ syntax errors, add .gitignore
+
+---
+ .gitignore | 19 ++++++++++++++++---
+ content.js |  6 +++++-
+ popup.html |  2 +-
+ 3 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index b03908e..3545313 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,4 +1,17 @@
+-*.py
+-test_*
++# Build artifacts
++*.zip
++*.7z
++*.crx
++
++# Temp files
++release_payload.json
++create_release.py
++fix_all.py
++fix_js.py
++fix_welcome.py
++test_button.html
++
++# OS files
++Thumbs.db
++Desktop.ini
+ .DS_Store
+-*.log
+diff --git a/content.js b/content.js
+index 301faf8..7896087 100644
+--- a/content.js
++++ b/content.js
+@@ -157,6 +157,7 @@
+       /* 液态玻璃卡片：百度/Bing/Google/通用 */
+       '#content_left > .result,',
+       '#content_left > .result-op,',
++      '#content_left > .c-container,',
+       'div.g,',
+       'div[data-hveid],',
+       '.b_algo,',
+@@ -209,6 +210,7 @@
+       /* 顶部主题色高光 */
+       '#content_left > .result::before,',
+       '#content_left > .result-op::before,',
++      '#content_left > .c-container::before,',
+       'div.g::before,',
+       '.b_algo::before,',
+       '.result::before,',
+@@ -238,6 +240,7 @@
+       /* 底部主题色辉光 */
+       '#content_left > .result::after,',
+       '#content_left > .result-op::after,',
++      '#content_left > .c-container::after,',
+       'div.g::after,',
+       '.b_algo::after,',
+       '.result::after,',
+@@ -267,6 +270,7 @@
+       /* 卡片悬停 */
+       '#content_left > .result:hover,',
+       '#content_left > .result-op:hover,',
++      '#content_left > .c-container:hover,',
+       'div.g:hover,',
+       'div[data-hveid]:hover,',
+       '.b_algo:hover,',
+@@ -505,7 +509,7 @@
+     removeAds();
+       if (settings.cardStyle) {
+         const cards = document.querySelectorAll(
+-          '#content_left > .result, #content_left > .result-op, ' +
++          '#content_left > .result, #content_left > .result-op, #content_left > .c-container, ' +
+           'div.g, div[data-hveid], .b_algo, .results .vrResult, .result, ' +
+           /* DuckDuckGo */
+           '.result--web, .result__body, ' +
+diff --git a/popup.html b/popup.html
+index 133afce..5c51379 100644
+--- a/popup.html
++++ b/popup.html
+@@ -325,7 +325,7 @@
+     <div class="header-icon">🔍</div>
+     <div class="header-text">
+       <h1>LiquidSearch</h1>
+-      <p>液态搜索增强 v1.1</p>
++      <p>液态搜索增强 v1.2</p>
+     </div>
+   </div>
+ 
+-- 
+2.53.0.windows.3
+

@@ -106,6 +106,21 @@
     '.b_rs',
     '.b_related',
     '#b_context',
+    /* 360主页广告 */
+    '.ad-top',
+    '.ad-bottom',
+    '.ad-left',
+    '.ad-right',
+    '[class*="ad-wrap"]',
+    '[class*="feed-ad"]',
+    '[class*="banner-ad"]',
+    '.promotion',
+    '[class*="promotion"]',
+    '.sponsor',
+    '[class*="sponsor"]',
+    '.recommend-ad',
+    '.news-ad',
+    '.info-ad',
   ];
 
   function removeAds() {

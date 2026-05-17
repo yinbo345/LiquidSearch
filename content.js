@@ -77,27 +77,7 @@
     '.results [data-ad]',
     '#results .ad',
     '.ft .ad-wrap',
-    /* 360搜索 AI总结 + 广告 + 相关搜索 + 实时热搜 */
-    '.ai-summary',
-    '[class*="ai-summary"]',
-    '[class*="ai_summary"]',
-    '.result-ai',
-    '.so-bd .ad',
-    '#so_results .ad',
-    '.news-article-ad',
-    /* 360相关搜索 */
-    '.rs_cont',
-    '.rs',
-    '#rs',
-    '[class*="related"]',
-    '[class*="relate_"]',
-    '.search-relation',
-    '.relate-new',
-    /* 360实时热搜 */
-    '.hot-news',
-    '.hot-news-list',
-    '[class*="hot-news"]',
-    '.real-time-hot',
+
     '[class*="real-time"]',
     '.hot-rank',
     '[class*="hot-rank"]',
@@ -439,53 +419,7 @@
         'display: none !important;',
       '}',
 
-      /* 360主页/导航页简化 - 只保留搜索框和快捷访问 */
-      'body[data-ls360home="1"] .header,',
-      'body[data-ls360home="1"] .top-nav,',
-      'body[data-ls360home="1"] .nav,',
-      'body[data-ls360home="1"] .news,',
-      'body[data-ls360home="1"] .news-feed,',
-      'body[data-ls360home="1"] .feed,',
-      'body[data-ls360home="1"] .recommend,',
-      'body[data-ls360home="1"] .recommendation,',
-      'body[data-ls360home="1"] .hot-search,',
-      'body[data-ls360home="1"] .trending,',
-      'body[data-ls360home="1"] .rank,',
-      'body[data-ls360home="1"] .ranking,',
-      'body[data-ls360home="1"] .ad,',
-      'body[data-ls360home="1"] [class*="ad"],',
-      'body[data-ls360home="1"] .footer,',
-      'body[data-ls360home="1"] .bottom,',
-      'body[data-ls360home="1"] .links,',
-      'body[data-ls360home="1"] .friend-link,',
-      'body[data-ls360home="1"] .sitemap,',
-      'body[data-ls360home="1"] .content,',
-      'body[data-ls360home="1"] .main-content,',
-      /* 360导航页特有元素 */
-      'body[data-ls360home="1"] .sites,',
-      'body[data-ls360home="1"] .site-list,',
-      'body[data-ls360home="1"] .category,',
-      'body[data-ls360home="1"] .category-list,',
-      'body[data-ls360home="1"] .tool,',
-      'body[data-ls360home="1"] .tool-box,',
-      'body[data-ls360home="1"] .module,',
-      'body[data-ls360home="1"] .panel,',
-      'body[data-ls360home="1"] .card:not(:has(.shortcut)),',
-      'body[data-ls360home="1"] .box:not(:has(.shortcut)),',
-      'body[data-ls360home="1"] .section,',
-      'body[data-ls360home="1"] .area,',
-      'body[data-ls360home="1"] .main-site,',
-      'body[data-ls360home="1"] .hot-site,',
-      'body[data-ls360home="1"] .recommend-site,',
-      'body[data-ls360home="1"] .info,',
-      'body[data-ls360home="1"] .information,',
-      'body[data-ls360home="1"] .weather,',
-      'body[data-ls360home="1"] .widget,',
-      'body[data-ls360home="1"] .widget-box,',
-      'body[data-ls360home="1"] .wrap:not(:has(#search)):not(:has(.shortcut)),',
-      'body[data-ls360home="1"] .container:not(:has(#search)):not(:has(.shortcut)) {',
-        'display: none !important;',
-      '}',
+
     ].join(' ');
 
     styleEl = document.createElement('style');
@@ -494,112 +428,8 @@
     document.head.appendChild(styleEl);
   }
 
-  // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
-  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
-  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
-    // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
-  function simplifyHomePage() {
-    console.log('[LiquidSearch] simplifyHomePage 被调用，ls360home=', document.body.dataset.ls360home);
-    if (!document.body.dataset.ls360home) return;
 
-    // 1. 找到搜索框（多种选择器尝试）
-    let searchInput = document.querySelector(
-      '#search-kw, #q, #kw, #searchInput, #search-input, .search-input,' +
-      'input[type="text"], input[type="search"], input:not([type]),' +
-      'input[name], input[id], [class*="search"] input, [id*="search"] input'
-    );
-    // 备用：找 form 里的第一个 input
-    if (!searchInput) {
-      const form = document.querySelector('form');
-      if (form) searchInput = form.querySelector('input');
-    }
-    // 备用：找页面中任意 input（排除 hidden）
-    if (!searchInput) {
-      document.querySelectorAll('input').forEach(inp => {
-        if (!searchInput && inp.type !== 'hidden') {
-          searchInput = inp;
-        }
-      });
-    }
-    if (!searchInput) {
-      console.log('[LiquidSearch] 未找到搜索框，1秒后重试');
-      setTimeout(simplifyHomePage, 1000);
-      return;
-    }
-    console.log('[LiquidSearch] 找到搜索框:', searchInput.outerHTML.slice(0, 100));
-
-    // 2. 找到包含搜索框的 body 直接子元素（wrapper）
-    let wrapper = searchInput;
-    while (wrapper && wrapper.parentElement && wrapper.parentElement !== document.body) {
-      wrapper = wrapper.parentElement;
-    }
-    if (!wrapper || wrapper === document.body || wrapper === searchInput) {
-      console.log('[LiquidSearch] 未找到 wrapper');
-      return;
-    }
-    console.log('[LiquidSearch] wrapper:', wrapper.tagName, wrapper.className || wrapper.id || '');
-
-    // 3. 隐藏 body 的其他直接子元素
-    Array.from(document.body.children).forEach(child => {
-      if (child !== wrapper) child.style.display = 'none';
-    });
-
-    // 4. 在 wrapper 内部，找到搜索框所在的直接子元素
-    let searchArea = searchInput;
-    while (searchArea && searchArea.parentElement && searchArea.parentElement !== wrapper) {
-      searchArea = searchArea.parentElement;
-    }
-
-    // 5. 遍历 wrapper 子元素，保留搜索区和快捷访问，隐藏其他
-    const hiddenTags = ['nav', 'header', 'footer', 'aside'];
-    const hideKeywords = ['ad', 'sponsor', 'promo', 'banner', 'footer', 'bottom', 'news', 'trend', 'rank'];
-    const shortcutKeywords = ['short', 'quick', 'link', 'site', 'nav', 'menu', 'favor', 'book', 'site', '常用'];
-
-    Array.from(wrapper.children).forEach(child => {
-      // 5a. 保留搜索框区域
-      if (child === searchArea || child.contains(searchArea)) return;
-
-      // 5b. 隐藏 nav/header/footer/aside 标签
-      if (hiddenTags.includes(child.tagName.toLowerCase())) {
-        child.style.display = 'none';
-        return;
-      }
-
-      // 5c. 检查是否是快捷访问（含多个非广告链接）
-      const links = child.querySelectorAll('a');
-      if (links.length >= 3) {
-        const cls = ' ' + (child.className || '') + ' ';
-        const id  = ' ' + (child.id || '') + ' ';
-        if (shortcutKeywords.some(k => cls.includes(k) || id.includes(k))) return;
-      }
-
-      // 5d. 检查类名是否含广告/推荐等关键词
-      const cls = ' ' + (child.className || '') + ' ';
-      if (hideKeywords.some(k => cls.includes(' ' + k + ' ') || cls.includes('-' + k + ' ') || cls.includes(' ' + k + '-'))) {
-        child.style.display = 'none';
-        return;
-      }
-
-      // 5e. 默认隐藏（只保留搜索框和快捷访问）
-      child.style.display = 'none';
-    });
-
-    // 6. 美化居中
-    document.body.style.background   = '#f4f5f7';
-    document.body.style.minHeight    = '100vh';
-    document.body.style.margin       = '0';
-    document.body.style.display      = 'flex';
-    document.body.style.flexDirection   = 'column';
-    document.body.style.justifyContent = 'center';
-    document.body.style.alignItems    = 'center';
-    wrapper.style.display = '';
-    wrapper.style.flexDirection = 'column';
-    wrapper.style.alignItems = 'center';
-    console.log('[LiquidSearch] 主页简化完成');
-  }
-
-
-  // ========== 2b. 关闭所有美化效果 ==========
+// ========== 2b. 关闭所有美化效果 ==========
   function disableAllStyles() {
     if (styleEl && styleEl.parentNode) styleEl.remove();
     const lsFont = document.getElementById('ls-font');
@@ -676,8 +506,7 @@
       removeAds();
       injectStyles();
       applyFont();
-      simplifyHomePage();
-    });
+      });
   }
 
   if (document.readyState === 'loading') {
@@ -690,7 +519,6 @@
   const observer = new MutationObserver(() => {
     if (settings.beautificationEnabled === false) return;
     removeAds();
-    if (document.body.dataset.ls360home) simplifyHomePage();
       if (settings.cardStyle) {
         const cards = document.querySelectorAll(
           '#content_left > .result, #content_left > .result-op, #content_left > .c-container, ' +
@@ -705,8 +533,7 @@
           '.result-item, ' +
           /* Brave */
           '.Vroosting, .VrResults > div, ' +
-          /* 360搜索 */
-          '.result, .res-list .res-item, #results .res, [data-360-result], ' +
+
           /* 搜狗 */
           '#results .vrResult, #results .result, .results .result, .wrap_result, ' +
           /* 通用后备 */

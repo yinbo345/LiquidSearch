@@ -548,6 +548,11 @@
           : '0 8px 32px ' + cc.glow + '0.10), 0 2px 8px rgba(0,0,0,0.04)';
         cards.forEach(el => {
           if (el.dataset.liquidStyled && el.dataset.liquidTheme === settings.theme && el.dataset.liquidColor === settings.themeColor) return;
+          // 排除尺寸过小的元素（避免 tab 栏、按钮等被误匹配）
+          if (el.offsetHeight < 40) return;
+          // 排除已有渐变背景的元素（避免 backdrop-filter 与 linear-gradient 冲突产生条纹）
+          const bg = getComputedStyle(el).backgroundImage;
+          if (bg && bg.includes('linear-gradient')) return;
           el.dataset.liquidStyled  = '1';
           el.dataset.liquidTheme   = settings.theme;
           el.dataset.liquidColor  = settings.themeColor;

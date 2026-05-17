@@ -494,26 +494,50 @@
   }
 
   // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
+  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   function simplifyHomePage() {
     if (!document.body.dataset.ls360home) return;
 
-    // 隐藏常见布局/广告/推荐元素
-    const hideSelectors = [
-      'nav', 'header', 'footer', 'aside',
-      '[role="navigation"]', '[role="banner"]', '[role="contentinfo"]', '[role="complementary"]'
-    ];
-    hideSelectors.forEach(sel => {
-      try { document.querySelectorAll(sel).forEach(el => { el.style.display = 'none'; }); } catch(e) {}
-    });
+    const keep = new Set();
 
-    // 通过类名关键词隐藏
-    const keywords = ['nav', 'header', 'footer', 'news', 'feed', 'ad', 'sponsor', 'promo', 'recommend', 'hot', 'trend', 'rank', 'bottom', 'links', 'sitemap', 'weather', 'widget', 'banner'];
-    document.querySelectorAll('[class]').forEach(el => {
-      const cls = ' ' + (el.className || '') + ' ';
-      if (keywords.some(k => cls.includes(' ' + k) || cls.includes(k + '-') || cls.includes('-' + k))) {
-        el.style.display = 'none';
+    // 1. 保留搜索框及其所有父容器
+    document.querySelectorAll('input[type="text"], input[type="search"], form').forEach(el => {
+      let node = el;
+      for (let i = 0; i < 7 && node && node !== document.body; i++) {
+        keep.add(node);
+        node = node.parentElement;
       }
     });
+
+    // 2. 保留快捷访问区域（含多个<a>且类名/ID带有关键词）
+    const shortcutKw = ["short", "quick", "link", "site", "book", "favor", "item", "menu"];
+    document.querySelectorAll("div, ul, section, nav").forEach(el => {
+      if (el.querySelectorAll("a").length < 3) return;
+      const cls = " " + (el.className || "") + " ";
+      const id  = " " + (el.id || "") + " ";
+      if (shortcutKw.some(k => cls.includes(k) || id.includes(k))) {
+        let node = el;
+        for (let i = 0; i < 5 && node && node !== document.body; i++) {
+          keep.add(node);
+          node = node.parentElement;
+        }
+      }
+    });
+
+    // 3. 隐藏 body 直接子元素中不在 keep 里的
+    Array.from(document.body.children).forEach(child => {
+      if (!keep.has(child)) child.style.display = "none";
+      else child.style.display = "";
+    });
+
+    // 4. 美化：居中搜索框
+    document.body.style.background   = "#f4f5f7";
+    document.body.style.minHeight    = "100vh";
+    document.body.style.margin       = "0";
+    document.body.style.display      = "flex";
+    document.body.style.flexDirection   = "column";
+    document.body.style.justifyContent = "center";
+    document.body.style.alignItems    = "center";
   }
 
   // ========== 2b. 关闭所有美化效果 ==========

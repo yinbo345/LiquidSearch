@@ -504,9 +504,9 @@
 
     // 1. 找到搜索框（多种选择器尝试）
     let searchInput = document.querySelector(
+      '#search-kw, #q, #kw, #searchInput, #search-input, .search-input,' +
       'input[type="text"], input[type="search"], input:not([type]),' +
-      'input[name], input[id], .search-input, #search-input,' +
-      '[class*="search"] input, [id*="search"] input'
+      'input[name], input[id], [class*="search"] input, [id*="search"] input'
     );
     // 备用：找 form 里的第一个 input
     if (!searchInput) {
@@ -516,13 +516,14 @@
     // 备用：找页面中任意 input（排除 hidden）
     if (!searchInput) {
       document.querySelectorAll('input').forEach(inp => {
-        if (!searchInput && inp.type !== 'hidden' && inp.offsetWidth > 0) {
+        if (!searchInput && inp.type !== 'hidden') {
           searchInput = inp;
         }
       });
     }
     if (!searchInput) {
-      console.log('[LiquidSearch] 未找到搜索框，跳过主页简化');
+      console.log('[LiquidSearch] 未找到搜索框，1秒后重试');
+      setTimeout(simplifyHomePage, 1000);
       return;
     }
     console.log('[LiquidSearch] 找到搜索框:', searchInput.outerHTML.slice(0, 100));
@@ -660,10 +661,9 @@
       }
       document.documentElement.dataset.liquidTheme = settings.theme;
 
-      // 检测是否在360主页/导航页（不是搜索结果页）
+      // 检测是否在导航页（hao.360 等聚合导航页，不是搜索引擎主页）
       console.log('[LiquidSearch] 当前域名:', location.hostname, '路径:', location.pathname);
-      if ((location.hostname === 'www.so.com' && location.pathname === '/') ||
-          (location.hostname === 'hao.360.cn' && location.pathname === '/') ||
+      if ((location.hostname === 'hao.360.cn' && location.pathname === '/') ||
           (location.hostname === 'hao.360.com' && location.pathname === '/') ||
           (location.hostname === 'cn.bing.com' && (location.pathname === '/' || location.pathname === ''))) {
         document.body.dataset.ls360home = '1';
@@ -690,6 +690,7 @@
   const observer = new MutationObserver(() => {
     if (settings.beautificationEnabled === false) return;
     removeAds();
+    if (document.body.dataset.ls360home) simplifyHomePage();
       if (settings.cardStyle) {
         const cards = document.querySelectorAll(
           '#content_left > .result, #content_left > .result-op, #content_left > .c-container, ' +

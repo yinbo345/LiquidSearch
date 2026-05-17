@@ -437,6 +437,33 @@
       '#b_context {',
         'display: none !important;',
       '}',
+
+      /* 360主页简化 - 只保留搜索框和快捷访问 */
+      'body[data-ls-360home="1"] .header,',
+      'body[data-ls-360home="1"] .top-nav,',
+      'body[data-ls-360home="1"] .nav,',
+      'body[data-ls-360home="1"] .news,',
+      'body[data-ls-360home="1"] .news-feed,',
+      'body[data-ls-360home="1"] .feed,',
+      'body[data-ls-360home="1"] .recommend,',
+      'body[data-ls-360home="1"] .recommendation,',
+      'body[data-ls-360home="1"] .hot-search,',
+      'body[data-ls-360home="1"] .trending,',
+      'body[data-ls-360home="1"] .rank,',
+      'body[data-ls-360home="1"] .ranking,',
+      'body[data-ls-360home="1"] .ad,',
+      'body[data-ls-360home="1"] [class*="ad"],',
+      'body[data-ls-360home="1"] .footer,',
+      'body[data-ls-360home="1"] .bottom,',
+      'body[data-ls-360home="1"] .links,',
+      'body[data-ls-360home="1"] .friend-link,',
+      'body[data-ls-360home="1"] .sitemap,',
+      'body[data-ls-360home="1"] .content,',
+      'body[data-ls-360home="1"] .main-content,',
+      'body[data-ls-360home="1"] .wrap:not(:has(#search)):not(:has(.shortcut)),',
+      'body[data-ls-360home="1"] .container:not(:has(#search)):not(:has(.shortcut)) {',
+        'display: none !important;',
+      '}',
     ].join(' ');
 
     styleEl = document.createElement('style');
@@ -506,6 +533,14 @@
         return;
       }
       document.documentElement.dataset.liquidTheme = settings.theme;
+
+      // 检测是否在360主页（不是搜索结果页）
+      if (location.hostname === 'www.so.com' && location.pathname === '/') {
+        document.body.dataset.ls360home = '1';
+      } else {
+        delete document.body.dataset.ls360home;
+      }
+
       removeAds();
       injectStyles();
       applyFont();

@@ -438,7 +438,7 @@
         'display: none !important;',
       '}',
 
-      /* 360主页简化 - 只保留搜索框和快捷访问 */
+      /* 360主页/导航页简化 - 只保留搜索框和快捷访问 */
       'body[data-ls-360home="1"] .header,',
       'body[data-ls-360home="1"] .top-nav,',
       'body[data-ls-360home="1"] .nav,',
@@ -460,6 +460,27 @@
       'body[data-ls-360home="1"] .sitemap,',
       'body[data-ls-360home="1"] .content,',
       'body[data-ls-360home="1"] .main-content,',
+      /* 360导航页特有元素 */
+      'body[data-ls-360home="1"] .sites,',
+      'body[data-ls-360home="1"] .site-list,',
+      'body[data-ls-360home="1"] .category,',
+      'body[data-ls-360home="1"] .category-list,',
+      'body[data-ls-360home="1"] .tool,',
+      'body[data-ls-360home="1"] .tool-box,',
+      'body[data-ls-360home="1"] .module,',
+      'body[data-ls-360home="1"] .panel,',
+      'body[data-ls-360home="1"] .card:not(:has(.shortcut)),',
+      'body[data-ls-360home="1"] .box:not(:has(.shortcut)),',
+      'body[data-ls-360home="1"] .section,',
+      'body[data-ls-360home="1"] .area,',
+      'body[data-ls-360home="1"] .main-site,',
+      'body[data-ls-360home="1"] .hot-site,',
+      'body[data-ls-360home="1"] .recommend-site,',
+      'body[data-ls-360home="1"] .info,',
+      'body[data-ls-360home="1"] .information,',
+      'body[data-ls-360home="1"] .weather,',
+      'body[data-ls-360home="1"] .widget,',
+      'body[data-ls-360home="1"] .widget-box,',
       'body[data-ls-360home="1"] .wrap:not(:has(#search)):not(:has(.shortcut)),',
       'body[data-ls-360home="1"] .container:not(:has(#search)):not(:has(.shortcut)) {',
         'display: none !important;',
@@ -534,8 +555,9 @@
       }
       document.documentElement.dataset.liquidTheme = settings.theme;
 
-      // 检测是否在360主页（不是搜索结果页）
-      if (location.hostname === 'www.so.com' && location.pathname === '/') {
+      // 检测是否在360主页/导航页（不是搜索结果页）
+      if ((location.hostname === 'www.so.com' && location.pathname === '/') ||
+          (location.hostname === 'hao.360.cn' && location.pathname === '/')) {
         document.body.dataset.ls360home = '1';
       } else {
         delete document.body.dataset.ls360home;

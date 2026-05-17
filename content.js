@@ -439,50 +439,50 @@
       '}',
 
       /* 360主页/导航页简化 - 只保留搜索框和快捷访问 */
-      'body[data-ls-360home="1"] .header,',
-      'body[data-ls-360home="1"] .top-nav,',
-      'body[data-ls-360home="1"] .nav,',
-      'body[data-ls-360home="1"] .news,',
-      'body[data-ls-360home="1"] .news-feed,',
-      'body[data-ls-360home="1"] .feed,',
-      'body[data-ls-360home="1"] .recommend,',
-      'body[data-ls-360home="1"] .recommendation,',
-      'body[data-ls-360home="1"] .hot-search,',
-      'body[data-ls-360home="1"] .trending,',
-      'body[data-ls-360home="1"] .rank,',
-      'body[data-ls-360home="1"] .ranking,',
-      'body[data-ls-360home="1"] .ad,',
-      'body[data-ls-360home="1"] [class*="ad"],',
-      'body[data-ls-360home="1"] .footer,',
-      'body[data-ls-360home="1"] .bottom,',
-      'body[data-ls-360home="1"] .links,',
-      'body[data-ls-360home="1"] .friend-link,',
-      'body[data-ls-360home="1"] .sitemap,',
-      'body[data-ls-360home="1"] .content,',
-      'body[data-ls-360home="1"] .main-content,',
+      'body[data-ls360home="1"] .header,',
+      'body[data-ls360home="1"] .top-nav,',
+      'body[data-ls360home="1"] .nav,',
+      'body[data-ls360home="1"] .news,',
+      'body[data-ls360home="1"] .news-feed,',
+      'body[data-ls360home="1"] .feed,',
+      'body[data-ls360home="1"] .recommend,',
+      'body[data-ls360home="1"] .recommendation,',
+      'body[data-ls360home="1"] .hot-search,',
+      'body[data-ls360home="1"] .trending,',
+      'body[data-ls360home="1"] .rank,',
+      'body[data-ls360home="1"] .ranking,',
+      'body[data-ls360home="1"] .ad,',
+      'body[data-ls360home="1"] [class*="ad"],',
+      'body[data-ls360home="1"] .footer,',
+      'body[data-ls360home="1"] .bottom,',
+      'body[data-ls360home="1"] .links,',
+      'body[data-ls360home="1"] .friend-link,',
+      'body[data-ls360home="1"] .sitemap,',
+      'body[data-ls360home="1"] .content,',
+      'body[data-ls360home="1"] .main-content,',
       /* 360导航页特有元素 */
-      'body[data-ls-360home="1"] .sites,',
-      'body[data-ls-360home="1"] .site-list,',
-      'body[data-ls-360home="1"] .category,',
-      'body[data-ls-360home="1"] .category-list,',
-      'body[data-ls-360home="1"] .tool,',
-      'body[data-ls-360home="1"] .tool-box,',
-      'body[data-ls-360home="1"] .module,',
-      'body[data-ls-360home="1"] .panel,',
-      'body[data-ls-360home="1"] .card:not(:has(.shortcut)),',
-      'body[data-ls-360home="1"] .box:not(:has(.shortcut)),',
-      'body[data-ls-360home="1"] .section,',
-      'body[data-ls-360home="1"] .area,',
-      'body[data-ls-360home="1"] .main-site,',
-      'body[data-ls-360home="1"] .hot-site,',
-      'body[data-ls-360home="1"] .recommend-site,',
-      'body[data-ls-360home="1"] .info,',
-      'body[data-ls-360home="1"] .information,',
-      'body[data-ls-360home="1"] .weather,',
-      'body[data-ls-360home="1"] .widget,',
-      'body[data-ls-360home="1"] .widget-box,',
-      'body[data-ls-360home="1"] .wrap:not(:has(#search)):not(:has(.shortcut)),',
-      'body[data-ls-360home="1"] .container:not(:has(#search)):not(:has(.shortcut)) {',
+      'body[data-ls360home="1"] .sites,',
+      'body[data-ls360home="1"] .site-list,',
+      'body[data-ls360home="1"] .category,',
+      'body[data-ls360home="1"] .category-list,',
+      'body[data-ls360home="1"] .tool,',
+      'body[data-ls360home="1"] .tool-box,',
+      'body[data-ls360home="1"] .module,',
+      'body[data-ls360home="1"] .panel,',
+      'body[data-ls360home="1"] .card:not(:has(.shortcut)),',
+      'body[data-ls360home="1"] .box:not(:has(.shortcut)),',
+      'body[data-ls360home="1"] .section,',
+      'body[data-ls360home="1"] .area,',
+      'body[data-ls360home="1"] .main-site,',
+      'body[data-ls360home="1"] .hot-site,',
+      'body[data-ls360home="1"] .recommend-site,',
+      'body[data-ls360home="1"] .info,',
+      'body[data-ls360home="1"] .information,',
+      'body[data-ls360home="1"] .weather,',
+      'body[data-ls360home="1"] .widget,',
+      'body[data-ls360home="1"] .widget-box,',
+      'body[data-ls360home="1"] .wrap:not(:has(#search)):not(:has(.shortcut)),',
+      'body[data-ls360home="1"] .container:not(:has(#search)):not(:has(.shortcut)) {',
         'display: none !important;',
       '}',
     ].join(' ');
@@ -491,6 +491,29 @@
     styleEl.id = 'ls-dynamic';
     styleEl.textContent = css;
     document.head.appendChild(styleEl);
+  }
+
+  // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
+  function simplifyHomePage() {
+    if (!document.body.dataset.ls360home) return;
+
+    // 隐藏常见布局/广告/推荐元素
+    const hideSelectors = [
+      'nav', 'header', 'footer', 'aside',
+      '[role="navigation"]', '[role="banner"]', '[role="contentinfo"]', '[role="complementary"]'
+    ];
+    hideSelectors.forEach(sel => {
+      try { document.querySelectorAll(sel).forEach(el => { el.style.display = 'none'; }); } catch(e) {}
+    });
+
+    // 通过类名关键词隐藏
+    const keywords = ['nav', 'header', 'footer', 'news', 'feed', 'ad', 'sponsor', 'promo', 'recommend', 'hot', 'trend', 'rank', 'bottom', 'links', 'sitemap', 'weather', 'widget', 'banner'];
+    document.querySelectorAll('[class]').forEach(el => {
+      const cls = ' ' + (el.className || '') + ' ';
+      if (keywords.some(k => cls.includes(' ' + k) || cls.includes(k + '-') || cls.includes('-' + k))) {
+        el.style.display = 'none';
+      }
+    });
   }
 
   // ========== 2b. 关闭所有美化效果 ==========
@@ -568,6 +591,7 @@
       removeAds();
       injectStyles();
       applyFont();
+      simplifyHomePage();
     });
   }
 

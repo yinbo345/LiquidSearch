@@ -21,6 +21,7 @@
     "*://search.brave.com/*",
     "*://www.so.com/*",
     "*://hao.360.cn/*",
+    "*://hao.360.com/*",
     "*://www.sogou.com/*"
   ],
   "content_scripts": [
@@ -30,11 +31,13 @@
         "*://www.google.com/search*",
         "*://www.bing.com/search*",
         "*://cn.bing.com/search*",
+        "*://cn.bing.com/*",
         "*://www.sogou.com/web*",
         "*://weixin.sogou.com/*",
         "*://www.so.com/s*",
         "*://www.so.com/*",
         "*://hao.360.cn/*",
+        "*://hao.360.com/*",
         "*://www.youdao.com/*",
         "*://*.duckduckgo.com/*",
         "*://search.yahoo.com/*",

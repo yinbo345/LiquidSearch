@@ -557,7 +557,9 @@
 
       // 检测是否在360主页/导航页（不是搜索结果页）
       if ((location.hostname === 'www.so.com' && location.pathname === '/') ||
-          (location.hostname === 'hao.360.cn' && location.pathname === '/')) {
+          (location.hostname === 'hao.360.cn' && location.pathname === '/') ||
+          (location.hostname === 'hao.360.com' && location.pathname === '/') ||
+          (location.hostname === 'cn.bing.com' && (location.pathname === '/' || location.pathname === ''))) {
         document.body.dataset.ls360home = '1';
       } else {
         delete document.body.dataset.ls360home;

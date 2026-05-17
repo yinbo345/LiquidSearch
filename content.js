@@ -496,72 +496,51 @@
   // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
+  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   function simplifyHomePage() {
     if (!document.body.dataset.ls360home) return;
 
-    // 1. 收集需要保留的节点（搜索框+快捷访问+所有祖先直到body）
-    const keepNodes = new Set();
-    const keepBodyChildren = new Set();  // 需要保留的body直接子元素
+    // 1. 找到搜索框
+    const searchInput = document.querySelector('input[type="text"], input[type="search"], [name="q"], #kw, input[placeholder]');
+    if (!searchInput) return;
 
-    // 1a. 保留搜索框及其所有祖先直到body
-    document.querySelectorAll('input[type="text"], input[type="search"], form').forEach(el => {
-      let node = el;
-      while (node && node !== document.body) {
-        keepNodes.add(node);
-        node = node.parentElement;
-      }
-      if (node && node.parentElement === document.body) {
-        keepBodyChildren.add(node);
-      }
-    });
+    // 2. 找到包含搜索框的 body 直接子元素（wrapper）
+    let bodyChild = searchInput;
+    while (bodyChild && bodyChild.parentElement !== document.body) {
+      bodyChild = bodyChild.parentElement;
+    }
+    if (!bodyChild || bodyChild === document.body) return;
 
-    // 1b. 保留快捷访问区域
-    const shortcutKw = ["short", "quick", "link", "site", "book", "favor", "nav", "menu"];
-    document.querySelectorAll("div, ul, section, nav").forEach(el => {
-      if (el.querySelectorAll("a").length < 3) return;
-      const cls = " " + (el.className || "") + " ";
-      if (shortcutKw.some(k => cls.includes(k))) {
-        let node = el;
-        while (node && node !== document.body) {
-          keepNodes.add(node);
-          node = node.parentElement;
-        }
-        if (node && node.parentElement === document.body) {
-          keepBodyChildren.add(node);
-        }
-      }
-    });
-
-    // 2. 隐藏body中不需要的直接子元素
+    // 3. 隐藏 body 中不包含搜索框的其他直接子元素
     Array.from(document.body.children).forEach(child => {
-      if (!keepBodyChildren.has(child)) {
-        child.style.display = "none";
+      if (child !== bodyChild) child.style.display = "none";
+    });
+
+    // 4. 在保留的 wrapper 内部，找到搜索框所在的直接子元素
+    let searchContainer = searchInput;
+    while (searchContainer && searchContainer.parentElement !== bodyChild) {
+      searchContainer = searchContainer.parentElement;
+    }
+
+    // 5. 在 wrapper 内部，保留搜索框容器和快捷访问，隐藏其他
+    Array.from(bodyChild.children).forEach(child => {
+      // 5a. 保留搜索框所在的容器
+      if (child === searchContainer || child.contains(searchContainer)) return;
+
+      // 5b. 保留快捷访问（包含多个链接且类名/ID有关键词）
+      const links = child.querySelectorAll("a");
+      if (links.length >= 3) {
+        const cls = " " + (child.className || "") + " ";
+        const id  = " " + (child.id || "") + " ";
+        const shortcutKw = ["short", "quick", "link", "site", "nav", "menu", "favor", "book"];
+        if (shortcutKw.some(k => cls.includes(k) || id.includes(k))) return;
       }
+
+      // 5c. 隐藏其他所有（导航、广告、分类、footer等）
+      child.style.display = "none";
     });
 
-    // 3. 在保留的body子元素内部，清理不需要的子元素（但不清理包含搜索框的）
-    keepBodyChildren.forEach(child => {
-      // 3a. 隐藏nav/header/footer标签（搜索框不在里面）
-      child.querySelectorAll("nav, header, footer, aside").forEach(el => {
-        if (!el.querySelector('input[type="text"], input[type="search"]')) {
-          el.style.display = "none";
-        }
-      });
-
-      // 3b. 隐藏含有关键词的元素（搜索框不在里面）
-      const hideKw = ["nav", "header", "footer", "news", "ad", "sponsor", "promo", "recommend", "hot", "trend", "rank", "banner", "bottom", "category", "tab"];
-      child.querySelectorAll("[class]").forEach(el => {
-        if (el.closest('[data-ls-keep]')) return;
-        const cls = " " + (el.className || "") + " ";
-        if (hideKw.some(k => cls.includes(" " + k + " ") || cls.includes(" " + k + "-") || cls.includes("-" + k + " "))) {
-          if (!el.querySelector('input[type="text"], input[type="search"]')) {
-            el.style.display = "none";
-          }
-        }
-      });
-    });
-
-    // 4. 美化：居中显示
+    // 6. 美化：居中
     document.body.style.background   = "#f4f5f7";
     document.body.style.minHeight    = "100vh";
     document.body.style.margin       = "0";
@@ -569,6 +548,9 @@
     document.body.style.flexDirection   = "column";
     document.body.style.justifyContent = "center";
     document.body.style.alignItems    = "center";
+    bodyChild.style.display = "flex";
+    bodyChild.style.flexDirection = "column";
+    bodyChild.style.alignItems = "center";
   }
 
   // ========== 2b. 关闭所有美化效果 ==========

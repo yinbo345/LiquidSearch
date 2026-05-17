@@ -495,42 +495,73 @@
 
   // ========== 2a1. 主页简化：用JS隐藏非必要元素 ==========
   // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
+  // ========== 2a1. 主页简化：只保留搜索框和快捷访问 ==========
   function simplifyHomePage() {
     if (!document.body.dataset.ls360home) return;
 
-    const keep = new Set();
+    // 1. 收集需要保留的节点（搜索框+快捷访问+所有祖先直到body）
+    const keepNodes = new Set();
+    const keepBodyChildren = new Set();  // 需要保留的body直接子元素
 
-    // 1. 保留搜索框及其所有父容器
+    // 1a. 保留搜索框及其所有祖先直到body
     document.querySelectorAll('input[type="text"], input[type="search"], form').forEach(el => {
       let node = el;
-      for (let i = 0; i < 7 && node && node !== document.body; i++) {
-        keep.add(node);
+      while (node && node !== document.body) {
+        keepNodes.add(node);
         node = node.parentElement;
+      }
+      if (node && node.parentElement === document.body) {
+        keepBodyChildren.add(node);
       }
     });
 
-    // 2. 保留快捷访问区域（含多个<a>且类名/ID带有关键词）
-    const shortcutKw = ["short", "quick", "link", "site", "book", "favor", "item", "menu"];
+    // 1b. 保留快捷访问区域
+    const shortcutKw = ["short", "quick", "link", "site", "book", "favor", "nav", "menu"];
     document.querySelectorAll("div, ul, section, nav").forEach(el => {
       if (el.querySelectorAll("a").length < 3) return;
       const cls = " " + (el.className || "") + " ";
-      const id  = " " + (el.id || "") + " ";
-      if (shortcutKw.some(k => cls.includes(k) || id.includes(k))) {
+      if (shortcutKw.some(k => cls.includes(k))) {
         let node = el;
-        for (let i = 0; i < 5 && node && node !== document.body; i++) {
-          keep.add(node);
+        while (node && node !== document.body) {
+          keepNodes.add(node);
           node = node.parentElement;
+        }
+        if (node && node.parentElement === document.body) {
+          keepBodyChildren.add(node);
         }
       }
     });
 
-    // 3. 隐藏 body 直接子元素中不在 keep 里的
+    // 2. 隐藏body中不需要的直接子元素
     Array.from(document.body.children).forEach(child => {
-      if (!keep.has(child)) child.style.display = "none";
-      else child.style.display = "";
+      if (!keepBodyChildren.has(child)) {
+        child.style.display = "none";
+      }
     });
 
-    // 4. 美化：居中搜索框
+    // 3. 在保留的body子元素内部，清理不需要的子元素（但不清理包含搜索框的）
+    keepBodyChildren.forEach(child => {
+      // 3a. 隐藏nav/header/footer标签（搜索框不在里面）
+      child.querySelectorAll("nav, header, footer, aside").forEach(el => {
+        if (!el.querySelector('input[type="text"], input[type="search"]')) {
+          el.style.display = "none";
+        }
+      });
+
+      // 3b. 隐藏含有关键词的元素（搜索框不在里面）
+      const hideKw = ["nav", "header", "footer", "news", "ad", "sponsor", "promo", "recommend", "hot", "trend", "rank", "banner", "bottom", "category", "tab"];
+      child.querySelectorAll("[class]").forEach(el => {
+        if (el.closest('[data-ls-keep]')) return;
+        const cls = " " + (el.className || "") + " ";
+        if (hideKw.some(k => cls.includes(" " + k + " ") || cls.includes(" " + k + "-") || cls.includes("-" + k + " "))) {
+          if (!el.querySelector('input[type="text"], input[type="search"]')) {
+            el.style.display = "none";
+          }
+        }
+      });
+    });
+
+    // 4. 美化：居中显示
     document.body.style.background   = "#f4f5f7";
     document.body.style.minHeight    = "100vh";
     document.body.style.margin       = "0";
